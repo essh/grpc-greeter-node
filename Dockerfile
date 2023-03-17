@@ -1,12 +1,10 @@
+FROM fullstorydev/grpcurl:v1.8.7 as grpcurl
+
 FROM node:18.15.0
 
-WORKDIR /opt/app
+COPY --from=grpcurl /bin/grpcurl /usr/local/bin/grpcurl
 
-RUN mkdir -p /opt/grpcurl \
-  && curl -L "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_linux_x86_64.tar.gz" \
-    | tar xvz -C /opt/grpcurl \
-  && chmod +x /opt/grpcurl/grpcurl \
-  && chown root:root /opt/grpcurl/grpcurl
+WORKDIR /opt/app
 
 COPY package*.json ./
 RUN npm install
